@@ -9,6 +9,7 @@ import {
 import { RadioButton } from "react-native-paper";
 
 import firebase from "../../core/services/database/firebase";
+import Button from "./Button";
 
 interface InitialData {
   name: string;
@@ -66,14 +67,10 @@ const FormUser: React.FC = () => {
           value={users.document}
           onChangeText={(value) => handleChangeInput("document", value)}
           style={styles.inputText}
-          placeholder="Nome completo"
+          placeholder="Número do documento"
         />
       </View>
-      <TouchableHighlight onPress={() => addNewUser()}>
-        <View style={styles.button}>
-          <Text style={styles.textBtn}>Enviar</Text>
-        </View>
-      </TouchableHighlight>
+      <Button onPress={() => addNewUser()} label="Enviar" />
     </View>
   );
 };
