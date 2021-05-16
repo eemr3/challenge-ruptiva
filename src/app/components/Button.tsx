@@ -1,22 +1,43 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+} from "react-native";
 
 interface PorpsBtn {
   onPress: () => void;
   label: string;
+  isLoading?: boolean;
 }
 
-const Button = ({ onPress, label }: PorpsBtn) => {
+const Button = ({ onPress, label, isLoading }: PorpsBtn) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.button}>
-        <Text style={styles.textBtn}>{label}</Text>
+        {isLoading && <ActivityIndicator size="small" color="#9e9e9e" />}
+        {!isLoading && <Text style={styles.textBtn}>{label}</Text>}
       </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
+  buttonStyle: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    backgroundColor: "#25CAC6",
+  },
+  buttonBorderStyle: {
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: "blue",
+    borderStyle: "solid",
+  },
   textBtn: {
     fontSize: 18,
     fontWeight: "500",

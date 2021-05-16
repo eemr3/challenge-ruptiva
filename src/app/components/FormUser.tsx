@@ -1,21 +1,15 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableHighlight,
-  View,
-} from "react-native";
+import { StyleSheet, View, TextInput, Text } from "react-native";
 import { RadioButton } from "react-native-paper";
-
+import { TextInputMask } from "react-native-masked-text";
 import firebase from "../../core/services/database/firebase";
-import Button from "./Button";
+import { Formik, useFormik } from "formik";
 
-interface InitialData {
-  name: string;
-  document: string;
-  type: string;
-}
+import { CpfCnpj } from "../../utils/FormatHandleChangeInput";
+
+import { formValidation } from "../../utils/yup";
+
+import Button from "./Button";
 
 const initialData = {
   name: "",
@@ -24,54 +18,98 @@ const initialData = {
 };
 
 const FormUser: React.FC = () => {
-  const [users, setUsers] = useState<InitialData>(initialData);
-
-  const handleChangeInput = (name: string, value: string) => {
-    setUsers({ ...users, [name]: value });
-  };
-
-  const addNewUser = async () => {
-    if (users.name === "") {
-      console.log("campo obrigatório");
-    } else {
+  const {
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    values,
+    errors,
+    isSubmitting,
+  } = useFormik({
+    initialValues: {
+      name: "",
+      document: "",
+      type: "individual",
+    },
+    validationSchema: formValidation,
+    onSubmit: async (values, { resetForm }) => {
       await firebase.db.collection("users").add({
-        name: users.name,
-        document: users.document,
-        type: users.type,
+        name: values.name,
+        document: CpfCnpj(values.type, values.document),
+        type: values.type,
       });
-    }
-    setUsers(initialData);
-  };
+      resetForm({ values: initialData });
+    },
+  });
 
   return (
-    <View style={styles.container}>
+    <>
       <View>
         <RadioButton.Group
-          onValueChange={(value) => setUsers({ ...users, type: value })}
-          value={users.type}
+          onValueChange={handleChange("type")}
+          value={values.type}
         >
           <RadioButton.Item label="Pessoa física" value="individual" />
           <RadioButton.Item label="Pessoa juridica" value="business" />
         </RadioButton.Group>
       </View>
-      <View>
-        <TextInput
-          value={users.name}
-          onChangeText={(value) => handleChangeInput("name", value)}
-          style={styles.inputText}
-          placeholder="Nome completo"
+      <View style={styles.container}>
+        <View>
+          {!isSubmitting ? (
+            <TextInput
+              onChangeText={handleChange("name")}
+              onBlur={handleBlur("name")}
+              placeholder="Nome completo"
+              value={values.name}
+              style={styles.inputText}
+            />
+          ) : (
+            <TextInput
+              onChangeText={handleChange("name")}
+              onBlur={handleBlur("name")}
+              placeholder="Nome completo"
+              value={values.name}
+              style={styles.inputText}
+              editable={false}
+            />
+          )}
+          {errors.name ? (
+            <View>
+              <Text style={styles.errorField}>{errors.name}</Text>
+            </View>
+          ) : null}
+        </View>
+        <View>
+          {values.type === "individual" ? (
+            <TextInputMask
+              type={"cpf"}
+              value={values.document}
+              style={styles.inputText}
+              onChangeText={handleChange("document")}
+              placeholder="Numero do CPF"
+            />
+          ) : (
+            <TextInputMask
+              type={"cnpj"}
+              value={values.document}
+              style={styles.inputText}
+              onChangeText={handleChange("document")}
+              placeholder="Numero do CNPJ"
+            />
+          )}
+          {errors.document ? (
+            <View>
+              <Text style={styles.errorField}>{errors.document}</Text>
+            </View>
+          ) : null}
+        </View>
+        <Button
+          onPress={handleSubmit}
+          isLoading={isSubmitting}
+          label="Enviar"
         />
       </View>
-      <View>
-        <TextInput
-          value={users.document}
-          onChangeText={(value) => handleChangeInput("document", value)}
-          style={styles.inputText}
-          placeholder="Número do documento"
-        />
-      </View>
-      <Button onPress={() => addNewUser()} label="Enviar" />
-    </View>
+    </>
   );
 };
 
@@ -97,6 +135,12 @@ const styles = StyleSheet.create({
     borderBottomColor: "#000000",
     marginBottom: 10,
     padding: 7,
+    fontSize: 18,
+  },
+
+  errorField: {
+    color: "#d62828",
   },
 });
+
 export default FormUser;

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Alert } from "react-native";
-import { List, Button } from "react-native-paper";
+import { View, Text, StyleSheet, Alert, FlatList } from "react-native";
+import { Button } from "react-native-paper";
 import { FontAwesome } from "@expo/vector-icons";
+import { TextMask } from "react-native-masked-text";
 
 import firebase from "../../core/services/database/firebase";
 
@@ -16,18 +17,21 @@ const ListUsers: React.FC = () => {
   const [users, setUsers] = useState<ListUsers[]>([]);
 
   useEffect(() => {
-    firebase.db.collection("users").onSnapshot((snapshot) => {
-      setUsers(
-        snapshot.docs.map((doc) => {
-          return {
-            id: doc.id,
-            name: doc.data().name,
-            document: doc.data().document,
-            type: doc.data().type,
-          };
-        })
-      );
-    });
+    firebase.db
+      .collection("users")
+      .orderBy("name", "asc")
+      .onSnapshot((snapshot) => {
+        setUsers(
+          snapshot.docs.map((doc) => {
+            return {
+              id: doc.id,
+              name: doc.data().name,
+              document: doc.data().document,
+              type: doc.data().type,
+            };
+          })
+        );
+      });
   }, []);
 
   const handleDelete = (id: string) => {
@@ -50,31 +54,47 @@ const ListUsers: React.FC = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.textTitle}>Usuários</Text>
+
       {users.map((user) => {
         return (
-          <List.Item
-            titleStyle={
-              user.type === "individual"
-                ? styles.textListInd
-                : styles.textListBus
-            }
-            key={user.id}
-            title={user.name}
-            description={user.document}
-            style={styles.textList}
-            right={(props) => (
-              <View>
-                <Button
-                  style={{ marginBottom: 5 }}
-                  color="#DDDDDD"
-                  mode="contained"
-                  onPress={() => handleDelete(user.id)}
-                >
-                  <FontAwesome name="trash-o" size={24} color="black" />
-                </Button>
-              </View>
+          <View key={user.id} style={styles.textList}>
+            <Text
+              style={
+                user.type === "individual"
+                  ? styles.textListInd
+                  : styles.textListBus
+              }
+            >
+              {user.name}
+            </Text>
+            {user.type === "individual" ? (
+              <TextMask
+                value={user.document}
+                type={"cpf"}
+                options={{
+                  obfuscated: true,
+                }}
+              />
+            ) : (
+              <TextMask
+                value={user.document}
+                type={"cnpj"}
+                options={{
+                  obfuscated: true,
+                }}
+              />
             )}
-          />
+            <View>
+              <Button
+                style={{ marginTop: 5 }}
+                color="#DDDDDD"
+                mode="contained"
+                onPress={() => handleDelete(user.id)}
+              >
+                <FontAwesome name="trash-o" size={24} color="black" />
+              </Button>
+            </View>
+          </View>
         );
       })}
     </View>
@@ -94,6 +114,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textTransform: "uppercase",
   },
+
   textList: {
     flexWrap: "wrap",
     backgroundColor: "#e5e5e5",
@@ -101,11 +122,18 @@ const styles = StyleSheet.create({
     padding: 10,
     width: "90%",
   },
+
   textListInd: {
+    fontSize: 17,
     color: "#ff6a00",
+    marginBottom: 2,
   },
+
   textListBus: {
+    fontSize: 17,
     color: "#00b2ff",
+    marginBottom: 2,
   },
 });
+
 export default ListUsers;
