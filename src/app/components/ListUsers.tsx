@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Alert, FlatList } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import { Button } from "react-native-paper";
 import { FontAwesome } from "@expo/vector-icons";
 import { TextMask } from "react-native-masked-text";
@@ -85,14 +85,15 @@ const ListUsers: React.FC = () => {
               />
             )}
             <View>
-              <Button
-                style={{ marginTop: 5 }}
-                color="#DDDDDD"
-                mode="contained"
-                onPress={() => handleDelete(user.id)}
-              >
-                <FontAwesome name="trash-o" size={24} color="black" />
-              </Button>
+              <View style={styles.btnDelete}>
+                <FontAwesome
+                  name="trash-o"
+                  size={24}
+                  color="black"
+                  onPress={() => openConfirmationAlert(user.id)}
+                  style={{ padding: "10px" }}
+                />
+              </View>
             </View>
           </View>
         );
@@ -133,6 +134,11 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: "#00b2ff",
     marginBottom: 2,
+  },
+
+  btnDelete: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

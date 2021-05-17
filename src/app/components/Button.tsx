@@ -1,12 +1,6 @@
 import React from "react";
-
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  ActivityIndicator,
-} from "react-native";
+import { Flow } from "react-native-animated-spinkit";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface PorpsBtn {
   onPress: () => void;
@@ -16,12 +10,21 @@ interface PorpsBtn {
 
 const Button = ({ onPress, label, isLoading }: PorpsBtn) => {
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.button}>
-        {isLoading && <ActivityIndicator size="small" color="#9e9e9e" />}
-        {!isLoading && <Text style={styles.textBtn}>{label}</Text>}
-      </View>
-    </TouchableOpacity>
+    <>
+      {isLoading && (
+        <Text style={styles.textSpinner}>
+          <Flow size={30} color="#0000ff" />
+          Enviando
+        </Text>
+      )}
+      {!isLoading && (
+        <TouchableOpacity onPress={onPress}>
+          <View style={styles.button}>
+            <Text style={styles.textBtn}>{label}</Text>
+          </View>
+        </TouchableOpacity>
+      )}
+    </>
   );
 };
 
@@ -47,6 +50,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#DDDDDD",
     padding: 13,
     marginTop: 10,
+  },
+  textSpinner: {
+    textAlign: "center",
+    fontSize: 18,
+    fontWeight: "500",
   },
 });
 export default Button;
