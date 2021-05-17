@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Alert } from "react-native";
+import { View, Text, StyleSheet, Alert, ScrollView } from "react-native";
 import { Button } from "react-native-paper";
 import { FontAwesome } from "@expo/vector-icons";
 import { TextMask } from "react-native-masked-text";
+import { ListItem, Avatar, Icon } from "react-native-elements";
 
 import firebase from "../../core/services/database/firebase";
 
@@ -52,58 +53,93 @@ const ListUsers: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView>
       <Text style={styles.textTitle}>Usuários</Text>
 
       {users.map((user) => {
         return (
-          <View key={user.id} style={styles.textList}>
-            <Text
-              style={
-                user.type === "individual"
-                  ? styles.textListInd
-                  : styles.textListBus
-              }
-            >
-              {user.name}
-            </Text>
-            {user.type === "individual" ? (
-              <TextMask
-                value={user.document}
-                type={"cpf"}
-                options={{
-                  obfuscated: true,
-                }}
-              />
-            ) : (
-              <TextMask
-                value={user.document}
-                type={"cnpj"}
-                options={{
-                  obfuscated: true,
-                }}
-              />
-            )}
-            <View>
-              <View style={styles.btnDelete}>
-                <FontAwesome
-                  name="trash-o"
-                  size={24}
-                  color="black"
-                  onPress={() => openConfirmationAlert(user.id)}
-                  style={{ padding: "10px" }}
-                />
-              </View>
-            </View>
-          </View>
+          <ListItem key={user.id} bottomDivider>
+            <ListItem.Content>
+              <ListItem.Title
+                style={
+                  user.type === "individual"
+                    ? styles.textListInd
+                    : styles.textListBus
+                }
+              >
+                {user.name}
+              </ListItem.Title>
+              <ListItem.Subtitle>
+                {user.type === "individual" ? (
+                  <TextMask
+                    value={user.document}
+                    type={"cpf"}
+                    options={{
+                      obfuscated: true,
+                    }}
+                  />
+                ) : (
+                  <TextMask
+                    value={user.document}
+                    type={"cnpj"}
+                    options={{
+                      obfuscated: true,
+                    }}
+                  />
+                )}
+              </ListItem.Subtitle>
+            </ListItem.Content>
+            <Icon
+              name="trash"
+              type="font-awesome"
+              onPress={() => handleDelete(user.id)}
+            />
+          </ListItem>
+          // <View key={user.id} style={styles.textList}>
+          //   <Text
+          //     style={
+          //       user.type === "individual"
+          //         ? styles.textListInd
+          //         : styles.textListBus
+          //     }
+          //   >
+          //     {user.name}
+          //   </Text>
+          //   {user.type === "individual" ? (
+          //     <TextMask
+          //       value={user.document}
+          //       type={"cpf"}
+          //       options={{
+          //         obfuscated: true,
+          //       }}
+          //     />
+          //   ) : (
+          //     <TextMask
+          //       value={user.document}
+          //       type={"cnpj"}
+          //       options={{
+          //         obfuscated: true,
+          //       }}
+          //     />
+          //   )}
+
+          //   <FontAwesome
+          //     name="trash-o"
+          //     size={24}
+          //     color="black"
+          //     onPress={() => handleDelete(user.id)}
+          //     style={{ padding: 10 }}
+          //   />
+          // </View>
         );
       })}
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -116,29 +152,16 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
 
-  textList: {
-    flexWrap: "wrap",
-    backgroundColor: "#e5e5e5",
-    marginBottom: 5,
-    padding: 10,
-    width: "90%",
-  },
-
   textListInd: {
-    fontSize: 17,
+    fontSize: 16,
     color: "#ff6a00",
     marginBottom: 2,
   },
 
   textListBus: {
-    fontSize: 17,
+    fontSize: 16,
     color: "#00b2ff",
     marginBottom: 2,
-  },
-
-  btnDelete: {
-    justifyContent: "center",
-    alignItems: "center",
   },
 });
 

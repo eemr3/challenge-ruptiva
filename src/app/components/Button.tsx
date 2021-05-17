@@ -13,8 +13,7 @@ const Button = ({ onPress, label, isLoading }: PorpsBtn) => {
     <>
       {isLoading && (
         <Text style={styles.textSpinner}>
-          <Flow size={30} color="#0000ff" />
-          Enviando
+          <Flow size={30} color="#000" /> Enviando
         </Text>
       )}
       {!isLoading && (
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
-    backgroundColor: "#DDDDDD",
+    backgroundColor: "#fff",
     padding: 13,
     marginTop: 10,
   },

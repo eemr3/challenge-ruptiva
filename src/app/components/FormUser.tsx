@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, View, TextInput, Text } from "react-native";
 import { RadioButton } from "react-native-paper";
 import { TextInputMask } from "react-native-masked-text";
@@ -80,21 +80,26 @@ const FormUser: React.FC = () => {
           ) : null}
         </View>
         <View>
-          {values.type === "individual" ? (
+          {!isSubmitting ? (
+            <TextInputMask
+              type={values.type === "individual" ? "cpf" : "cnpj"}
+              value={values.document}
+              style={styles.inputText}
+              onChangeText={handleChange("document")}
+              placeholder={
+                values.type === "individual"
+                  ? "Número do CPF"
+                  : "Número do CNPJ"
+              }
+            />
+          ) : (
             <TextInputMask
               type={"cpf"}
               value={values.document}
               style={styles.inputText}
               onChangeText={handleChange("document")}
               placeholder="Numero do CPF"
-            />
-          ) : (
-            <TextInputMask
-              type={"cnpj"}
-              value={values.document}
-              style={styles.inputText}
-              onChangeText={handleChange("document")}
-              placeholder="Numero do CNPJ"
+              editable={false}
             />
           )}
           {errors.document ? (
@@ -140,6 +145,10 @@ const styles = StyleSheet.create({
 
   errorField: {
     color: "#d62828",
+  },
+
+  radioText: {
+    fontSize: 30,
   },
 });
 
