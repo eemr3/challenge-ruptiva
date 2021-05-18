@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Alert, ScrollView } from "react-native";
-import { Button } from "react-native-paper";
-import { FontAwesome } from "@expo/vector-icons";
+import { Text, StyleSheet, Alert, ScrollView } from "react-native";
 import { TextMask } from "react-native-masked-text";
-import { ListItem, Avatar, Icon } from "react-native-elements";
+import { ListItem, Icon } from "react-native-elements";
 
 import firebase from "../../core/services/database/firebase";
 
-interface ListUsers {
+interface ListUser {
   id: string;
   name: string;
   document: string;
@@ -15,7 +13,7 @@ interface ListUsers {
 }
 
 const ListUsers: React.FC = () => {
-  const [users, setUsers] = useState<ListUsers[]>([]);
+  const [users, setUsers] = useState<ListUser[]>([]);
 
   useEffect(() => {
     firebase.db
@@ -92,45 +90,9 @@ const ListUsers: React.FC = () => {
             <Icon
               name="trash"
               type="font-awesome"
-              onPress={() => handleDelete(user.id)}
+              onPress={() => openConfirmationAlert(user.id)}
             />
           </ListItem>
-          // <View key={user.id} style={styles.textList}>
-          //   <Text
-          //     style={
-          //       user.type === "individual"
-          //         ? styles.textListInd
-          //         : styles.textListBus
-          //     }
-          //   >
-          //     {user.name}
-          //   </Text>
-          //   {user.type === "individual" ? (
-          //     <TextMask
-          //       value={user.document}
-          //       type={"cpf"}
-          //       options={{
-          //         obfuscated: true,
-          //       }}
-          //     />
-          //   ) : (
-          //     <TextMask
-          //       value={user.document}
-          //       type={"cnpj"}
-          //       options={{
-          //         obfuscated: true,
-          //       }}
-          //     />
-          //   )}
-
-          //   <FontAwesome
-          //     name="trash-o"
-          //     size={24}
-          //     color="black"
-          //     onPress={() => handleDelete(user.id)}
-          //     style={{ padding: 10 }}
-          //   />
-          // </View>
         );
       })}
     </ScrollView>

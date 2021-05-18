@@ -2,7 +2,7 @@ import firebase from "firebase/app";
 
 import "firebase/firestore";
 
-const firebaseConfig = {
+let config = {
   apiKey: "AIzaSyCzgp7l_RFzTOOkpgG6Vjome_Jspq75ZA8",
   authDomain: "ruptiva-challeng.firebaseapp.com",
   projectId: "ruptiva-challeng",
@@ -11,7 +11,8 @@ const firebaseConfig = {
   appId: "1:503829255821:web:b1e219860da1699d7e74c4",
 };
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+
+firebase.initializeApp(config);
 
 const db = firebase.firestore();
 
