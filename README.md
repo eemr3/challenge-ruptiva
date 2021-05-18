@@ -48,6 +48,7 @@ Construído usando React-Native (Expo), salvando os dados no Firebase/Firestore;
 
 ### Link do Sanck
 ### [challenge-ruptiva](https://snack.expo.io/@eemr3/github.com-eemr3-challenge-ruptiva)
+ps.: Não seio o motivo mas no snack o projeto esta rodando somente no modo Android, no modo web esta acusando erro que não consegui resolver.
 
 ## :seedling: Requisitos Mínimos
 
