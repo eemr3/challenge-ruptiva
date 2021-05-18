@@ -39,12 +39,13 @@ Construído usando React-Native (Expo), salvando os dados no Firebase/Firestore;
 - Tive um pouco de dificuldades em montar o layout também por motivo de desconhecimento de como funciona o ract-native.
 
 
-##### Link do Sanck
-[challenge-ruptiva](https://snack.expo.io/@eemr3/github.com-eemr3-challenge-ruptiva)
+### Link do Sanck
+### [challenge-ruptiva](https://snack.expo.io/@eemr3/github.com-eemr3-challenge-ruptiva)
 
 ## :seedling: Requisitos Mínimos
 
-NodeJs v14.16.1, Expo v4.4.6
+- NodeJs v14.16.1
+- Expo v4.4.6
 
 ## :rocket: Tecnologias Utilizadas 
 
@@ -54,6 +55,12 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias
 - React-native
 - Firebase
 - Firestore
+
+## :link: Como baixar, instalar e rodar
+
+- Clone o repositório
+- Instalando as dependências: use ```yarn``` ou ```npm install```
+- Rodando no localhost: use ```expo start```
 
 ## Licença 
 
